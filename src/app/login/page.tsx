@@ -32,11 +32,12 @@ let {push} = useRouter()
   let formik= useFormik({
     initialValues ,
     onSubmit : async (values)=>{
+      console.log(token)
       await dispatch(login(values))
-      if(localStorage.getItem('token') == "undefined"){
+      if(localStorage.getItem('token') !== token){
         toast.error(error)
       }
-if(isSuccess && localStorage.getItem('token') !== "undefined"){
+if(token){
 push('/')
 }
 else{
