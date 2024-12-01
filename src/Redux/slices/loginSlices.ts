@@ -6,12 +6,15 @@ let initialState = {
     token:localStorage.getItem('token') , 
     isLoading:false,
     error:'',
-    isSuccess:false
+    isSuccess:false,
+    checkStatus : "",
 }
 
 export let login = createAsyncThunk('auth/login'  , async(values : LoginData)=>{
     try{
         let {data} = await axios.post('https://linked-posts.routemisr.com/users/signin', values)
+        console.log(data.message);
+        
         return data
     }
  catch(err: any){
@@ -34,6 +37,8 @@ let authSlice = createSlice({
           state.isLoading = false , 
           state.isSuccess = true , 
           state.token = action.payload.token
+          state.checkStatus = action.payload.message; // Storing message
+          console.log("Login successful:", action.payload.message);
           localStorage.setItem('token' , action.payload.token)
           state.error = action.payload
           console.log(action.payload)

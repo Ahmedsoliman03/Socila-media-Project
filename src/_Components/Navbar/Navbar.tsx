@@ -17,6 +17,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import LanguageSwitcher from '../switchLanguage';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -109,6 +110,7 @@ let router = useRouter() //next/navigation
       <MenuItem onClick={()=>handleMenuClose("")}>Profile</MenuItem>
       <MenuItem onClick={()=>handleMenuClose('login')}>Login</MenuItem>
       <MenuItem onClick={()=>logOut()}>Logout</MenuItem>
+      {/* <LanguageSwitcher/> */}
     </Menu>
   );
 

@@ -13,8 +13,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { login } from '@/Redux/slices/loginSlices'
 import { storeDispatch, storeState } from '@/Redux/store'
 import { useRouter } from 'next/navigation'
+import { useTranslation } from 'next-i18next';
 
 export default function Login() {
+  const { t } = useTranslation('common');
+
   let initialValues :LoginData =  {
     email:"", 
     password:""
@@ -35,7 +38,8 @@ let {push} = useRouter()
       console.log(token)
       await dispatch(login(values))
       if(localStorage.getItem('token') !== token){
-        toast.error(error)
+        
+        toast.error("Email or password is incorrect")
       }
 if(token){
 push('/')
@@ -85,6 +89,8 @@ fullWidth />
       <Button disabled={isLoading} type='submit' variant="contained" sx={{my:2}}>
         {isLoading?<CircularProgress color="inherit"/> : "Login"}
       </Button>
+      {/* <h1>{t('welcome')}</h1> */}
+
 
 </form>
       </Paper>
