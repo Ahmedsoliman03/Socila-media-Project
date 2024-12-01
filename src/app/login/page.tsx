@@ -16,7 +16,6 @@ import { useRouter } from 'next/navigation'
 import { useTranslation } from 'next-i18next';
 
 export default function Login() {
-  const { t } = useTranslation('common');
 
   let initialValues :LoginData =  {
     email:"", 
@@ -32,30 +31,31 @@ export default function Login() {
 const dispatch = useDispatch<storeDispatch>()
 let {isLoading , isSuccess , error , token}=useSelector((state : storeState)=>state.authReducer)
 let {push} = useRouter()
+
+useEffect(()=>{
+  if(localStorage.getItem('token')){
+    push('/')
+    console.log("Done")
+  }
+  else{
+    push('/login')
+  }
+    },[token])
   let formik= useFormik({
     initialValues ,
     onSubmit : async (values)=>{
       console.log(token)
       await dispatch(login(values))
-      if(localStorage.getItem('token') !== token){
-        
+      if(localStorage.getItem('token')== 'undefined'){
+        push('/login')
         toast.error("Email or password is incorrect")
+        
       }
-if(token){
-push('/')
-}
-else{
-  push('/login')
-}
     } , 
     validationSchema ,
   })
 
-  useEffect(()=>{
-if(localStorage.getItem('token') ){
-  push('/')
-}
-  },[])
+ 
   return (
     <>
     <Container maxWidth="sm">
