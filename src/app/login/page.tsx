@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import Container from '@mui/material/Container'
 import Paper from '@mui/material/Paper'
-import { TextField, Typography , Button } from '@mui/material'
+import { TextField, Typography , Button, Box, IconButton, InputAdornment } from '@mui/material'
 import { useFormik } from 'formik'
 import { LoginData } from './../interfaces/login';
 import * as yup from "yup";
@@ -14,9 +14,11 @@ import { login } from '@/Redux/slices/loginSlices'
 import { storeDispatch, storeState } from '@/Redux/store'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'next-i18next';
+import { Visibility, VisibilityOff } from '@mui/icons-material'
 
 export default function Login() {
-
+  const[showPass , setShowPass] = useState(false)
+const [t] = useTranslation()
   let initialValues :LoginData =  {
     email:"", 
     password:""
@@ -55,7 +57,9 @@ useEffect(()=>{
     validationSchema ,
   })
 
- 
+ const togglePasswordVisibility =()=>{
+setShowPass(!showPass)
+ }
   return (
     <>
     <Container maxWidth="sm">
@@ -73,19 +77,29 @@ onBlur={formik.handleBlur}
       error={formik.touched.email && Boolean(formik.errors.email)}
       helperText={formik.touched.email && formik.errors.email}
 fullWidth />
-
+<Box>
       <TextField value={formik.values.password} 
       onChange={formik.handleChange} 
       id="password" 
       label="password" 
-      type='password' 
+      type={showPass ? "text" : "password"} 
       variant="standard" 
       fullWidth
       onBlur={formik.handleBlur}
       error={formik.touched.password && Boolean(formik.errors.password)}
       helperText={formik.touched.password && formik.errors.password}
-      
+      InputProps={{
+        endAdornment: (
+          <InputAdornment position="end">
+            <IconButton onClick={togglePasswordVisibility} edge="end">
+              {showPass ? < Visibility/> : < VisibilityOff/>}
+            </IconButton>
+          </InputAdornment>
+        ),
+      }}
       />
+     
+      </Box>
       <Button disabled={isLoading} type='submit' variant="contained" sx={{my:2}}>
         {isLoading?<CircularProgress color="inherit"/> : "Login"}
       </Button>
