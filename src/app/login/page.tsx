@@ -15,6 +15,7 @@ import { storeDispatch, storeState } from '@/Redux/store'
 import { useRouter } from 'next/navigation'
 import { useTranslation } from 'next-i18next';
 import { Visibility, VisibilityOff } from '@mui/icons-material'
+import Link from 'next/link'
 
 export default function Login() {
   const[showPass , setShowPass] = useState(false)
@@ -104,6 +105,7 @@ fullWidth />
         {isLoading?<CircularProgress color="inherit"/> : "Login"}
       </Button>
       {/* <h1>{t('welcome')}</h1> */}
+      <Link href="/register" >Register</Link>
 
 
 </form>
