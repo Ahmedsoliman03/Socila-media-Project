@@ -11,6 +11,8 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { useTranslation } from 'next-i18next'
 import dayjs from 'dayjs'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 
 export default function Register() {
   const [showPass, setShowPass] = useState(false)
@@ -22,7 +24,7 @@ export default function Register() {
     email: '',
     password: '',
     rePassword: '',
-    dateOfBirth: '', // Date of birth managed by Formik
+    dateOfBirth: '', 
     gender: ''
   }
 
@@ -43,16 +45,25 @@ export default function Register() {
       .oneOf([yup.ref('password')], 'Passwords must match')
       .required("Repassword is required"),
     dateOfBirth: yup.string()
-      .required(t('date of birth is required')),
+      .required('date of birth is required'),
     gender: yup.string()
       .required(t('gender is required'))
   })
 
+ async function handleRegister(values) {
+  try{
+    const {data} = await axios.post('https://linked-posts.routemisr.com/users/signup' , values )
+    toast.success(data.message)
+  }
+  catch(err){
+    toast.error(err.response?.data?.error || "Something went wrong. Please try again.");
+  }
+ }
   let formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: async (values) => {
-        console.log(values);
+    onSubmit: (values) => {
+        handleRegister(values)
 
       }
       
@@ -151,16 +162,13 @@ export default function Register() {
     onChange={(newValue) => {
       formik.setFieldValue('dateOfBirth', newValue ? newValue.toISOString() : '');
     }}
-    onBlur={formik.handleBlur} // Explicitly set touched
-    renderInput={(params) => (
-      <TextField    
-        {...params}
-        fullWidth
-        error={formik.touched.dateOfBirth && Boolean(formik.errors.dateOfBirth)}
-        helperText={formik.touched.dateOfBirth && formik.errors.dateOfBirth}
-      />
-    )}
+    onBlur={formik.handleBlur}
+   
   />
+   {formik.touched.dateOfBirth && formik.errors.dateOfBirth && (
+  <Typography color="error">{formik.errors.dateOfBirth}</Typography>
+)}
+
 </LocalizationProvider>
 {/* Gender */}
 <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel>
@@ -169,7 +177,7 @@ export default function Register() {
     name="radio-buttons-group"
     aria-label='Gender'
     row
-    onBlur={() => formik.setFieldTouched('gender', true)} // Explicitly set touched
+    onBlur={() => formik.setFieldTouched('gender', true)} 
 
   >
         <FormControlLabel value="male" control={<Radio />} label="Male" onChange={(e)=>   formik.setFieldValue('gender',e.target.value)}/>
@@ -181,7 +189,7 @@ export default function Register() {
 
             <Button  type='submit'  variant="contained" sx={{ my: 2 }}>
             Register
-                        </Button>
+       </Button>
           </form>
         </Paper>
       </Container>

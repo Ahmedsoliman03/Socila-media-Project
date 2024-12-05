@@ -1,10 +1,13 @@
-'use client';
+// theme.js
 import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
-  typography: {
-    fontFamily: 'var(--font-roboto)',
-  },
+  palette: {
+    primary: {
+      main: '#09c', // Primary color
+  
+    }
+  }
 });
 
 export default theme;
