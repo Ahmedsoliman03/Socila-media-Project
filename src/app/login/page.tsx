@@ -105,7 +105,11 @@ fullWidth />
         {isLoading?<CircularProgress color="inherit"/> : "Login"}
       </Button>
       {/* <h1>{t('welcome')}</h1> */}
-      <Link href="/register" >Register</Link>
+      <Link href="/register"  >
+      <Typography  sx={{color:"#09c" , textDecoration:"underline"}}>
+        Register
+      </Typography>
+      </Link>
 
 
 </form>

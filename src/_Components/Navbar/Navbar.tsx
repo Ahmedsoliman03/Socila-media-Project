@@ -186,7 +186,7 @@ let router = useRouter() //next/navigation
             component="div"
             sx={{ display: { xs: 'block' } , cursor:"pointer" }}
           >
-            Circle
+            SocialSphere
           </Typography>
          </Link>
 

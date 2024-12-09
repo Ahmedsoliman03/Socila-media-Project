@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import Container from '@mui/material/Container'
 import Paper from '@mui/material/Paper'
 import { TextField, Typography, Button, Box, IconButton, InputAdornment, RadioGroup, FormControlLabel, Radio, FormLabel } from '@mui/material'
@@ -13,12 +13,14 @@ import { useTranslation } from 'next-i18next'
 import dayjs from 'dayjs'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import { useRouter } from 'next/navigation'
+import "../loading.css"
 
 export default function Register() {
   const [showPass, setShowPass] = useState(false)
   const [showRePass, setShowRePass] = useState(false)
   const [t] = useTranslation()
-
+let router = useRouter()
   let initialValues = {
     name: '',
     email: '',
@@ -50,10 +52,13 @@ export default function Register() {
       .required(t('gender is required'))
   })
 
- async function handleRegister(values) {
+ async function handleRegister(values: {}) {
   try{
     const {data} = await axios.post('https://linked-posts.routemisr.com/users/signup' , values )
     toast.success(data.message)
+    setTimeout(() => {
+router.push('/login')
+    },5000)
   }
   catch(err){
     toast.error(err.response?.data?.error || "Something went wrong. Please try again.");
@@ -193,6 +198,8 @@ export default function Register() {
           </form>
         </Paper>
       </Container>
+      
+  
     </>
   )
 }
