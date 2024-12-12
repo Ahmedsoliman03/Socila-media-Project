@@ -16,10 +16,15 @@ import { useRouter } from 'next/navigation'
 import { useTranslation } from 'next-i18next';
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import Link from 'next/link'
+import Cookies from 'universal-cookie'
 
 export default function Login() {
   const[showPass , setShowPass] = useState(false)
 const [t] = useTranslation()
+const cookies = new Cookies();
+
+const name = cookies.get("name");
+
   let initialValues :LoginData =  {
     email:"", 
     password:""
@@ -37,8 +42,9 @@ let {push} = useRouter()
 
 useEffect(()=>{
   if(localStorage.getItem('token')){
-    push('/')
-    console.log("Done")
+    setTimeout(() => {
+      push('/')
+    }, 3000);
   }
   else{
     push('/login')
@@ -47,12 +53,13 @@ useEffect(()=>{
   let formik= useFormik({
     initialValues ,
     onSubmit : async (values)=>{
-      console.log(token)
       await dispatch(login(values))
       if(localStorage.getItem('token')== 'undefined'){
         push('/login')
-        toast.error("Email or password is incorrect")
-        
+        toast.error("Email or password is incorrect")  
+      }
+      else{
+        toast.success(`welcom ${name}`)  
       }
     } , 
     validationSchema ,

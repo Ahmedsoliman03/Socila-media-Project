@@ -18,6 +18,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import LanguageSwitcher from '../switchLanguage';
+import Cookies from 'universal-cookie';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -82,8 +83,11 @@ let router = useRouter() //next/navigation
     router.push(`/${route}`)
   
   };
+  const cookies = new Cookies();
+
   const logOut = ()=>{
     localStorage.removeItem('token')
+    cookies.remove("name")
    handleMenuClose("login")
   }
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {

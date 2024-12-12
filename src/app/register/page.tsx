@@ -6,7 +6,7 @@ import { TextField, Typography, Button, Box, IconButton, InputAdornment, RadioGr
 import { useFormik } from 'formik'
 import * as yup from "yup"
 import CircularProgress from '@mui/material/CircularProgress'
-import { Visibility, VisibilityOff } from '@mui/icons-material'
+import {Visibility, VisibilityOff } from '@mui/icons-material'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { useTranslation } from 'next-i18next'
@@ -15,10 +15,11 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
 import "../loading.css"
-
+import Cookies from 'universal-cookie'
 export default function Register() {
   const [showPass, setShowPass] = useState(false)
   const [showRePass, setShowRePass] = useState(false)
+  const [isloading , setLoading]=useState(false)
   const [t] = useTranslation()
 let router = useRouter()
   let initialValues = {
@@ -51,17 +52,24 @@ let router = useRouter()
     gender: yup.string()
       .required(t('gender is required'))
   })
+  const cookies = new Cookies();
+  async function handleRegister(values: {}) {
+  setLoading(true)
 
- async function handleRegister(values: {}) {
   try{
     const {data} = await axios.post('https://linked-posts.routemisr.com/users/signup' , values )
     toast.success(data.message)
+    setLoading(false)
+    cookies.set("name" , formik.values.name)
+    
     setTimeout(() => {
 router.push('/login')
-    },5000)
+    },3000)
   }
   catch(err){
     toast.error(err.response?.data?.error || "Something went wrong. Please try again.");
+    setLoading(false)
+
   }
  }
   let formik = useFormik({
@@ -192,9 +200,9 @@ router.push('/login')
   <Typography color="error">{formik.errors.gender}</Typography>
 )}
 
-            <Button  type='submit'  variant="contained" sx={{ my: 2 }}>
-            Register
-       </Button>
+            <Button  type='submit' disabled={isloading}  variant="contained" sx={{ my: 2 }}>
+            {isloading?<CircularProgress color="inherit"/> : "Register"}
+            </Button>
           </form>
         </Paper>
       </Container>
