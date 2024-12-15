@@ -42,9 +42,7 @@ let {push} = useRouter()
 
 useEffect(()=>{
   if(localStorage.getItem('token')){
-    setTimeout(() => {
       push('/')
-    }, 3000);
   }
   else{
     push('/login')
@@ -58,8 +56,11 @@ useEffect(()=>{
         push('/login')
         toast.error("Email or password is incorrect")  
       }
+      else if(!cookies.get("name")){
+         toast.success(`Welcome`)  
+      }
       else{
-        toast.success(`welcom ${name}`)  
+        toast.success(`Welcome ${name}`)
       }
     } , 
     validationSchema ,

@@ -66,7 +66,7 @@ let router = useRouter()
 router.push('/login')
     },3000)
   }
-  catch(err){
+  catch(err:any){
     toast.error(err.response?.data?.error || "Something went wrong. Please try again.");
     setLoading(false)
 

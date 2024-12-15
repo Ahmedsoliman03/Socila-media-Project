@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { authReducer } from "./slices/loginSlices";
+import { postReducer } from "./slices/allPosts";
 
 export let store = configureStore({
     reducer: {
-        authReducer
+        authReducer,
+        postReducer
     }
 })
 
