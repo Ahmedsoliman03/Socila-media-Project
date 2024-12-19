@@ -2,12 +2,12 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Post } from './../../app/interfaces/allPosts';
 import axios from "axios";
 
-let initialState:{posts:Post[] , isloading:boolean} = {
+const initialState:{posts:Post[] , isloading:boolean} = {
     posts:[],
     isloading:false,
 }
-export let getPostts = createAsyncThunk('posts/getPosts' , async()=>{
-    let {data} = await axios.get("https://linked-posts.routemisr.com/posts?limit=50" , {
+export const getPostts = createAsyncThunk('posts/getPosts' , async()=>{
+    const {data} = await axios.get("https://linked-posts.routemisr.com/posts?limit=20" , {
         headers:{
             token:localStorage.getItem("token")
         }
@@ -15,7 +15,7 @@ export let getPostts = createAsyncThunk('posts/getPosts' , async()=>{
     console.log(data.posts)
     return data.posts;
 })
-let allPosts = createSlice({
+const allPosts = createSlice({
 name:"posts",
 initialState,
 reducers:{},
@@ -29,4 +29,4 @@ builder.addCase(getPostts.fulfilled , (state , action)=>{
 })
 }
 })
-export let postReducer = allPosts.reducer
+export const postReducer = allPosts.reducer

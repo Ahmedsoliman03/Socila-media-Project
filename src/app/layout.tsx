@@ -11,7 +11,6 @@ import { ToastContainer } from "react-toastify";
 import { Provider } from "react-redux";
 import { store } from './../Redux/store';
 import { appWithTranslation } from 'next-i18next';
-import LanguageSwitcher from "@/_Components/switchLanguage";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

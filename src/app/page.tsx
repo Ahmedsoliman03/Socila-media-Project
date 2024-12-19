@@ -9,26 +9,26 @@ import PostDetails from "./_Components/postdetails/PostDetails";
 import { Container } from "@mui/material";
 
 export default function Home() {
-  let { posts, isloading } = useSelector(
+  const { posts, isloading } = useSelector(
     (state: storeState) => state.postReducer
   );
-  let { push } = useRouter();
-  let dispatch = useDispatch<storeDispatch>();
+  const { push } = useRouter();
+  const dispatch = useDispatch<storeDispatch>();
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       push("/login");
     } else {
       dispatch(getPostts());
     }
-  }, []);
+  }, [localStorage.getItem("token")]);
   return (
     <>
       {isloading ? (
         <Loading />
       ) : (
         <Container maxWidth="sm">
-          {posts.map((post, index) => (
-            <PostDetails key="index" post={post} />
+          {posts.map((post) => (
+            <PostDetails key={post._id} post={post} />
           ))}
         </Container>
       )}

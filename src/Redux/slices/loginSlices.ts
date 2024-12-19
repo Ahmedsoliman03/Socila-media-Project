@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { LoginData } from "@/app/interfaces/login";
 import axios from "axios";
 
-let initialState = {
+const initialState = {
     token:localStorage.getItem('token') , 
     isLoading:false,
     error:'',
@@ -10,27 +10,27 @@ let initialState = {
     checkStatus : "",
 }
 
-export let login = createAsyncThunk('auth/login'  , async(values : LoginData)=>{
+export const login = createAsyncThunk('auth/login'  , async(values : LoginData)=>{
     try{
-        let {data} = await axios.post('https://linked-posts.routemisr.com/users/signin', values)
+        const {data} = await axios.post('https://linked-posts.routemisr.com/users/signin', values)
         console.log(data.message);
         
         return data
     }
- catch(err: any){
-return err.response.data.error;
+ catch{
+return null;
  }
 })
 
-let authSlice = createSlice({
+const authSlice = createSlice({
     name: "auth",
     initialState ,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(login.pending , (state , action)=>{
+        builder.addCase(login.pending , (state )=>{
           state.isLoading = true 
         })
-        builder.addCase(login.rejected , (state , action)=>{
+        builder.addCase(login.rejected , (state )=>{
           state.isLoading = false       
         })
         builder.addCase(login.fulfilled , (state , action)=>{
@@ -48,4 +48,4 @@ let authSlice = createSlice({
         })
     },
 })
-export let authReducer = authSlice.reducer 
+export const authReducer = authSlice.reducer 

@@ -21,7 +21,7 @@ interface ExpandMoreProps extends IconButtonProps {
 }
 
 const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { expand, ...other } = props;
+  const { ...other } = props;
   return <IconButton {...other} />;
 })(({ theme }) => ({
   marginLeft: "auto",
@@ -50,7 +50,9 @@ export default function PostDetails({ post }: { post: Post }) {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
+  if (!post.image) {
+    return null;
+  }
   return (
     <Card sx={{ m: 3, p: 2 }}>
       <CardHeader
@@ -95,7 +97,7 @@ export default function PostDetails({ post }: { post: Post }) {
           <ShareIcon />
         </IconButton>
         <ExpandMore
-          expand={expanded}
+          expand={expanded ? "true" : undefined}
           onClick={handleExpandClick}
           aria-expanded={expanded}
           aria-label="show more"
