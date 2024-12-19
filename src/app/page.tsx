@@ -15,12 +15,13 @@ export default function Home() {
   const { push } = useRouter();
   const dispatch = useDispatch<storeDispatch>();
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
+    const token = localStorage.getItem("token");
+    if (!token) {
       push("/login");
     } else {
       dispatch(getPostts());
     }
-  }, [localStorage.getItem("token")]);
+  }, [dispatch, push]);
   return (
     <>
       {isloading ? (

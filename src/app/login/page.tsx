@@ -132,12 +132,12 @@ export default function Login() {
               />
             </Box>
             <Button
-              disabled={isLoading}
+              // disabled={isLoading}
               type="submit"
               variant="contained"
               sx={{ my: 2 }}
             >
-              {isLoading ? <CircularProgress color="inherit" /> : "Login"}
+              Login
             </Button>
             {/* <h1>{t('welcome')}</h1> */}
             <Link href="/register">

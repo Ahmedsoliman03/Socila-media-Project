@@ -1,21 +1,21 @@
-import * as React from 'react';
+import * as React from "react";
 // import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
 // import InputBase from '@mui/material/InputBase';
-import Badge from '@mui/material/Badge';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import Cookies from 'universal-cookie';
+import Badge from "@mui/material/Badge";
+import MenuItem from "@mui/material/MenuItem";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import MailIcon from "@mui/icons-material/Mail";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Cookies from "universal-cookie";
 
 // const Search = styled('div')(({ theme }) => ({
 //   position: 'relative',
@@ -66,68 +66,80 @@ export default function Navbar() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+    if (
+      window.location.pathname !== "/login" &&
+      window.location.pathname !== "/register"
+    ) {
+      setAnchorEl(event.currentTarget);
+    }
   };
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
   };
-const router = useRouter()
+  const router = useRouter();
 
-  const handleMenuClose = (route:string) => {
+  const handleMenuClose = (route: string) => {
     setAnchorEl(null);
     handleMobileMenuClose();
-    router.push(`/${route}`)
-  
+    router.push(`/${route}`);
   };
   const cookies = new Cookies();
 
-  const logOut = ()=>{
-    localStorage.removeItem('token')
-    cookies.remove("name")
-   handleMenuClose("login")
-  }
+  const logOut = () => {
+    localStorage.removeItem("token");
+    cookies.remove("name");
+    handleMenuClose("login");
+  };
   // const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
   //   setMobileMoreAnchorEl(event.currentTarget);
   // };
 
-  const menuId = 'primary-search-account-menu';
+  const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
+        vertical: "top",
+        horizontal: "right",
       }}
       id={menuId}
       keepMounted
       transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
+        vertical: "top",
+        horizontal: "right",
       }}
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={()=>handleMenuClose("")}>Profile</MenuItem>
-      <MenuItem onClick={()=>handleMenuClose('login')}>Login</MenuItem>
-      <MenuItem onClick={()=>logOut()}>Logout</MenuItem>
+      <MenuItem onClick={() => handleMenuClose("")}>Profile</MenuItem>
+      {localStorage.getItem("token") ||
+      window.location.pathname == "/login" ? null : (
+        <MenuItem onClick={() => handleMenuClose("login")}>Login</MenuItem>
+      )}
+      <MenuItem onClick={() => handleMenuClose("setting")}>
+        Change Password
+      </MenuItem>
+
+      <MenuItem onClick={() => logOut()}>Logout</MenuItem>
+
       {/* <LanguageSwitcher/> */}
     </Menu>
   );
 
-  const mobileMenuId = 'primary-search-account-menu-mobile';
+  const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
+        vertical: "top",
+        horizontal: "right",
       }}
       id={mobileMenuId}
       keepMounted
       transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
+        vertical: "top",
+        horizontal: "right",
       }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
@@ -180,20 +192,24 @@ const router = useRouter()
           >
             <MenuIcon />
           </IconButton>
-         <Link href='/'>
-         <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: 'block' } , cursor:"pointer" }}
-          >
-            SocialSphere
-          </Typography>
-         </Link>
+          <Link href="/">
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{ display: { xs: "block" }, cursor: "pointer" }}
+            >
+              SocialSphere
+            </Typography>
+          </Link>
 
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'flex'} }}>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+          <Box sx={{ display: { xs: "flex" } }}>
+            <IconButton
+              size="large"
+              aria-label="show 4 new mails"
+              color="inherit"
+            >
               <Badge badgeContent={4} color="error">
                 <MailIcon />
               </Badge>
@@ -219,7 +235,6 @@ const router = useRouter()
               <AccountCircle />
             </IconButton>
           </Box>
-
         </Toolbar>
       </AppBar>
       {renderMobileMenu}

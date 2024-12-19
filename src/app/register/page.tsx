@@ -94,6 +94,7 @@ export default function Register() {
         router.push("/login");
       }, 3000);
     } catch (err: any) {
+      console.log(err);
       toast.error(
         err.response?.data?.error || "Something went wrong. Please try again."
       );

@@ -34,15 +34,12 @@ const authSlice = createSlice({
           state.isLoading = false       
         })
         builder.addCase(login.fulfilled , (state , action)=>{
-          state.isLoading = false , 
-          state.isSuccess = true , 
-          state.token = action.payload.token
-          state.checkStatus = action.payload.message; // Storing message
-          console.log("Login successful:", action.payload.message);
-          localStorage.setItem('token' , action.payload.token)
-          state.error = action.payload
-          console.log(action.payload)
-          
+          state.isLoading = false;
+          state.isSuccess = true; 
+          state.token = action.payload.token;
+          state.checkStatus = action.payload.message;
+          localStorage.setItem('token', action.payload.token);
+          state.error = action.payload;          
 
 
         })
