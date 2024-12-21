@@ -44,9 +44,9 @@ export default function CreateNewPassword() {
     onSubmit: async (values) => {
       await dispatch(ChangePassword(values));
       if (message == "success") {
-        console.log("Password changed successfully");
+        toast.success(" correct");
       } else {
-        console.log("Current Password is Incorrect");
+        toast.error(error || "Current Password is incorrect");
       }
     },
     validationSchema,

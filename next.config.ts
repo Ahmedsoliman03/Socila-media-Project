@@ -1,9 +1,17 @@
 import type { NextConfig } from "next";
-import { i18n } from "./next-i18next.config"; // Import the i18n configuration
 
 const nextConfig: NextConfig = {
-  i18n, // Add i18n to the Next.js config
-  /* Other config options here */
+  //(https://linked-posts.routemisr.com/uploads/default-profile.png)
+images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'linked-posts.routemisr.com',
+        pathname: '/uploads/**',
+        search: '',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

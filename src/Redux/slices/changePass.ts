@@ -11,7 +11,7 @@ const initialState = {
     message: "",
 }
  
-export const ChangePassword = createAsyncThunk("pass/ChangePassword", async (values: ChangePass) => {
+export const ChangePassword = createAsyncThunk("pass/ChangePassword", async (values: ChangePass , {rejectWithValue}) => {
     try {
         const { data } = await axios.patch("https://linked-posts.routemisr.com/users/change-password", values, {
               headers:{
@@ -22,9 +22,8 @@ export const ChangePassword = createAsyncThunk("pass/ChangePassword", async (val
 
         
     }
-    catch(err : any) {
-        console.log(err.message);
-        
+    catch (error:any) {        
+        return rejectWithValue(error.response.data.error)
     }
 })
 
@@ -36,16 +35,20 @@ const ChangePasswordSlice = createSlice({
     extraReducers: (builder) => { 
         builder.addCase(ChangePassword.pending, (state) => { 
             state.isloading = true;
+            state.error = "";
         })
-        builder.addCase(ChangePassword.rejected, (state) => {
-            state.isloading = false;
+        builder.addCase(ChangePassword.rejected, (state , action) => {
+            state.error = action.payload
+                        state.isloading = false;
         })
         builder.addCase(ChangePassword.fulfilled, (state, action) => {
               if (action.payload?.token) {
         localStorage.setItem('token', action.payload.token);
     }
-    state.isloading = false;
             state.message = action.payload.message
+            console.log(action.payload.message)
+                state.isloading = false;
+
 
          })
     }

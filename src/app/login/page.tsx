@@ -21,14 +21,9 @@ import { storeDispatch, storeState } from "@/Redux/store";
 import { useRouter } from "next/navigation";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Link from "next/link";
-import Cookies from "universal-cookie";
 
 export default function Login() {
   const [showPass, setShowPass] = useState(false);
-  const cookies = new Cookies();
-
-  const name = cookies.get("name");
-
   const initialValues: LoginData = {
     email: "",
     password: "",
@@ -44,7 +39,9 @@ export default function Login() {
       .required("repassword is required"),
   });
   const dispatch = useDispatch<storeDispatch>();
-  const { isLoading } = useSelector((state: storeState) => state.authReducer);
+  const { isLoading, error } = useSelector(
+    (state: storeState) => state.authReducer
+  );
   const { push } = useRouter();
 
   useEffect(() => {
@@ -58,14 +55,10 @@ export default function Login() {
     initialValues,
     onSubmit: async (values) => {
       await dispatch(login(values));
-      if (localStorage.getItem("token") == "undefined") {
-        push("/login");
-        toast.error("Email or password is incorrect");
-      } else if (!cookies.get("name")) {
-        toast.success(`Welcome`);
-        push("/");
+      if (!localStorage.getItem("token")) {
+        toast.error(error || "incorrect email or password");
       } else {
-        toast.success(`Welcome ${name}`);
+        toast.success(`Welcome`);
         push("/");
       }
     },
@@ -132,16 +125,15 @@ export default function Login() {
               />
             </Box>
             <Button
-              // disabled={isLoading}
+              disabled={isLoading}
               type="submit"
               variant="contained"
               sx={{ my: 2 }}
             >
-              Login
+              {isLoading ? <CircularProgress /> : "Login"}
             </Button>
-            {/* <h1>{t('welcome')}</h1> */}
             <Link href="/register">
-              <Typography sx={{ color: "#09c", textDecoration: "underline" }}>
+              <Typography sx={{ color: "#333", textDecoration: "underline" }}>
                 Register
               </Typography>
             </Link>

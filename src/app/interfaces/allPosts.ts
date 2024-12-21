@@ -6,7 +6,7 @@ export interface User {
 export interface Comments {
     _id:string , 
     content:string,
-    commentcreator:User,
+    commentCreator:User,
     post: string,
     createdAt:string
 }

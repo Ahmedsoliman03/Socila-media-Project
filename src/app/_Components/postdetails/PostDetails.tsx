@@ -15,13 +15,16 @@ import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Post } from "@/app/interfaces/allPosts";
-
+import Image from "next/image";
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import CommentIcon from "@mui/icons-material/Comment";
+import { Button } from "@mui/material";
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
 
 const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { ...other } = props;
+  const { expand, ...other } = props;
   return <IconButton {...other} />;
 })(({ theme }) => ({
   marginLeft: "auto",
@@ -50,6 +53,7 @@ export default function PostDetails({ post }: { post: Post }) {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
   if (!post.image) {
     return null;
   }
@@ -61,7 +65,13 @@ export default function PostDetails({ post }: { post: Post }) {
             sx={{ bgcolor: red[500], cursor: "pointer" }}
             aria-label="recipe"
           >
-            {post.user.photo}
+            <Image
+              src={post.user.photo}
+              alt="my Image"
+              loading="lazy"
+              width={500}
+              height={500}
+            />
           </Avatar>
         }
         action={
@@ -74,7 +84,7 @@ export default function PostDetails({ post }: { post: Post }) {
           width: "fit-content",
           style: { cursor: "pointer" },
         }}
-        subheader="September 14, 2016"
+        subheader={post.createdAt.split("").slice(0, 10).join("")}
       />
 
       <CardContent>
@@ -89,32 +99,72 @@ export default function PostDetails({ post }: { post: Post }) {
         loading="lazy"
         alt="Paella dish"
       />
-      <CardActions disableSpacing>
+      <CardActions
+        sx={{
+          width: "80%",
+          margin: "auto",
+          display: "flex",
+          justifyContent: "space-around",
+        }}
+      >
         <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
+          <ThumbUpOffAltIcon />
         </IconButton>
         <ExpandMore
-          expand={expanded ? "true" : undefined}
+          expand={expanded}
           onClick={handleExpandClick}
           aria-expanded={expanded}
           aria-label="show more"
         >
-          <ExpandMoreIcon />
+          <CommentIcon />
         </ExpandMore>
+        <IconButton aria-label="share">
+          <ShareIcon />
+        </IconButton>
       </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          <Typography sx={{ marginBottom: 2 }}>Method:</Typography>
-
-          <Typography>
-            Set aside off of the heat to let rest for 10 minutes, and then
-            serve.
-          </Typography>
-        </CardContent>
-      </Collapse>
+      {post.comments.length > 0 && (
+        <Collapse
+          sx={{ background: "#eee" }}
+          in={expanded}
+          timeout="auto"
+          unmountOnExit
+        >
+          <CardContent>
+            <CardHeader
+              avatar={
+                <Avatar
+                  sx={{ bgcolor: red[500], cursor: "pointer" }}
+                  aria-label="recipe"
+                >
+                  <Image
+                    src={post.comments[0].commentCreator.photo}
+                    alt="my Image"
+                    loading="lazy"
+                    width={500}
+                    height={500}
+                  />
+                </Avatar>
+              }
+              action={
+                <IconButton aria-label="settings">
+                  <MoreVertIcon />
+                </IconButton>
+              }
+              title={post.comments[0].commentCreator.name}
+              titleTypographyProps={{
+                width: "fit-content",
+                style: { cursor: "pointer" },
+              }}
+              subheader={post.comments[0].createdAt
+                .split("")
+                .slice(0, 10)
+                .join("")}
+            />
+            <Typography sx={{ ps: 4 }}>{post.comments[0].content}</Typography>
+            <Button variant="text"> Click</Button>
+          </CardContent>
+        </Collapse>
+      )}
     </Card>
   );
 }
